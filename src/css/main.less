@@ -1,0 +1,886 @@
+
+@import "mobile.less";
+@import "tablet.less";
+
+/* ===================================================================
+   MIXINS
+   =================================================================== */
+
+
+/* Images ----------------------------------------------------------- */
+
+.background-image(@image, @width, @height, @position: center, @repeat: no-repeat) {
+  @filename  : ~`/(.*)\.(jpg|jpeg|png|gif)/.exec(@{image})[1]`;
+  @extension : ~`/(.*)\.(jpg|jpeg|png|gif)/.exec(@{image})[2]`;
+  background-image: ~`"url(@{filename}.@{extension})"`;
+  background-repeat: @repeat;
+  background-size: @width @height;
+  background-position: @position;
+}
+
+.slider-image(@image, @width, @height, @position: center, @repeat: no-repeat) {
+  @filename  : ~`/(.*)\.(jpg|jpeg|png|gif)/.exec(@{image})[1]`;
+  @extension : ~`/(.*)\.(jpg|jpeg|png|gif)/.exec(@{image})[2]`;
+  background-image: ~`"url(@{filename}.@{extension})"`;
+  background-repeat: @repeat;
+  background-size: @width @height;
+  width: @width;
+  height: @height;
+  background-position: center;
+}
+
+
+/* Cross Browser properties ----------------------------------------- */
+
+.background-clip(@argument: padding-box) {
+  -moz-background-clip: @argument;
+  -webkit-background-clip: @argument;
+  background-clip: @argument;
+}
+
+.border-radius(@topright: 0, @bottomright: 0, @bottomleft: 0, @topleft: 0) {
+  -webkit-border-top-right-radius: @topright;
+  -webkit-border-bottom-right-radius: @bottomright;
+  -webkit-border-bottom-left-radius: @bottomleft;
+  -webkit-border-top-left-radius: @topleft;
+  -moz-border-radius-topright: @topright;
+  -moz-border-radius-bottomright: @bottomright;
+  -moz-border-radius-bottomleft: @bottomleft;
+  -moz-border-radius-topleft: @topleft;
+  border-top-right-radius: @topright;
+  border-bottom-right-radius: @bottomright;
+  border-bottom-left-radius: @bottomleft;
+  border-top-left-radius: @topleft;
+  .background-clip(padding-box);
+}
+
+/* Buttons ----------------------------------------------------------- */
+
+.button-generic{
+  background-color: none;
+  display: block;
+  .border-radius(2em, 2em, 2em, 2em);
+  padding: .7em;
+  text-align: center;
+  border : none;
+  text-transform: uppercase;
+  font-size: 160%;
+  font-weight: 400;
+  display: inline-block;
+
+  -webkit-transition : all .2s ease-in-out;
+  @media @mobile{
+  	font-size: 120%;
+  	max-width: 200px;
+  	display: inline-block;
+ 	float: none;
+ 	margin: 8px 15px;
+  }
+}
+
+.button-generic-typeA{
+  .button-generic;
+  border : 2px solid @color-highlight;
+  color: @color-highlight;
+  background-color: #fff;
+}
+
+.button-generic-typeA-hover{
+  background-color: @color-highlight;
+  color: @color-text-banners;
+}
+
+.button-generic-typeB-hover{
+  background-color: rgba(0,0,0,.2);
+}
+
+.button-generic-typeB{
+  .button-generic;
+  border : 2px solid @color-bg-button;
+  color: @color-text-banners;
+  background-color: @color-bg-button;
+}
+
+/* Utilities ---------------------------------------------------------- */
+
+.clearfix() {
+  &:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+  }
+}
+
+/* =====================================================================
+    VARIABLES 
+   ===================================================================== */
+
+@mobile :  ~"only screen and (max-width: 990px)";
+
+/* Colors  ------------------------------------------------------------ */
+
+@color-highlight       : #98d361;
+@color-text-global     : #b9b9b9;
+@color-text-global-2   : #757575;
+@color-bg-button       : #b9b9b9;
+@color-bg-slider       : #000000;
+@color-text-banners    : #ffffff;
+@color-bg-input        : #ffffff;
+@color-bg-subscribe    : #f5f5f5;
+
+/* Others  ------------------------------------------------------------ */
+
+@path-images           : "../images";
+@content-width         : 1000px;
+
+
+/* ======================================================================
+   DOCUMENT STYLES
+   ====================================================================== */
+
+body{
+	color: @color-text-global;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+}
+
+ul,li{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mainContent{
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.appTestimonials,
+.appFeatures,
+.appFeaturesPlus,
+.appPreview{
+  /*overflow: hidden;*/
+}
+
+/* VALUE SLIDER | GENERIC ----------------------------------------------- */
+
+.value-slider{
+	padding: 0;
+}
+
+.value-slider-indicators{
+  text-align: center;
+  position: relative;
+  top: 138px;
+  left: 22px;
+}
+
+.value-slider-indicator{
+  width: 14px;
+  height: 14px;
+  border : 2px solid @color-highlight;
+  .border-radius(7px, 7px,7px,7px);
+  display: inline-block;
+  text-indent: -9999em;
+  margin: 0 5px;
+}
+
+.value-slider-indicator.selected{
+  background-color: @color-highlight;
+}
+
+.value-slider-container {
+    left: 0;
+    overflow: hidden;
+    position: relative;
+    top: 0;
+    margin: 0;
+    @media @mobile{
+      margin: 0;
+    }
+}
+
+.value-slider-main {
+  width: 100%;
+  height: 100%;
+}
+
+.value-slider-item{
+  float: left;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+}
+
+i{
+  display: none;
+}
+
+/* VALUE SLIDER | APP PREVIEW -------------------------------------------- */
+
+@iphone-slider-width   : 297px;
+@iphone-slider-height  : 529px;
+
+.appPreview .value-slider{
+  	.background-image('@{path-images}/iphone-background.png', 342px, 732px, left);
+  	height: 750px;
+	@media @mobile { 
+		background-position: center;
+		padding: 105px 0 0 0;
+	}
+}
+
+.appPreview .value-slider-indicators{
+  width : @iphone-slider-width;
+  @media @mobile{
+  	left: auto;
+  	top: auto;
+  	position: static;
+  	margin: 135px auto 0 auto;
+  }
+}
+
+.appPreview .value-slider-container {
+  width: @iphone-slider-width;
+  height: @iphone-slider-height;
+  margin: 110px 0 0 24px;
+  @media @mobile{
+  	 	margin: 0 auto;
+  }
+}
+
+
+.appPreview .value-slider-item.item1{
+  .slider-image('@{path-images}/app-screen-profile1.jpg', @iphone-slider-width, @iphone-slider-height);
+}
+
+.appPreview .value-slider-item.item2{
+  .slider-image('@{path-images}/app-screen-profile2.jpg', @iphone-slider-width, @iphone-slider-height);
+}
+
+.appPreview .value-slider-item.item3{
+  .slider-image('@{path-images}/app-screen-profile3.jpg', @iphone-slider-width, @iphone-slider-height);
+}
+
+/* VALUE SLIDER | APP FEATURES -------------------------------------------------- */
+
+@feature-slider-width : 539px;
+@feature-slider-height : 660px;
+@feature-slider-width-mobile : 320px;
+@feature-slider-height-mobile : 592px;
+
+.appFeaturesPlus .value-slider{
+  height: 750px;
+  margin: 50px 0;
+  @media @mobile{
+    height : @feature-slider-height-mobile;
+  }
+}
+
+.appFeaturesPlus .value-slider-indicators{
+  width : @feature-slider-width;
+  top: 0;
+  @media @mobile{
+    left: auto;
+    top: auto;
+    position: static;
+    margin: 0 auto 0 auto;
+    width : @feature-slider-width-mobile;
+  }
+}
+
+.appFeaturesPlus .value-slider-container {
+  width: @feature-slider-width;
+  height: @feature-slider-height;
+
+
+  @media @mobile{
+  	margin: 40px auto;
+   	width: @feature-slider-width-mobile;
+  	height: @feature-slider-height-mobile;
+  }
+}
+
+.appFeaturesPlus .value-slider-item.item1{
+  .slider-image('@{path-images}/app-screen-combo1.png', @feature-slider-width, @feature-slider-height);
+  @media @mobile{
+ 	width: @feature-slider-width-mobile;
+	height: @feature-slider-height-mobile;
+  }
+}
+
+.appFeaturesPlus .value-slider-item.item2{
+  .slider-image('@{path-images}/app-screen-combo2.png', @feature-slider-width, @feature-slider-height);
+  @media @mobile{
+ 	width: @feature-slider-width-mobile;
+	height: @feature-slider-height-mobile;
+  }
+}
+
+.appFeaturesPlus .value-slider-item.item3{
+  .slider-image('@{path-images}/app-screen-combo3.png', @feature-slider-width, @feature-slider-height);
+  @media @mobile{
+ 	width: @feature-slider-width-mobile;
+	height: @feature-slider-height-mobile;
+  }
+}
+
+/* VALUE SLIDER | APP TESTIMONIALS ---------------------------------------------- */
+
+@testimonials-slider-width : 100%;
+@testimonials-slider-height : 440px;
+@testimonials-slider-width-mobile : 100%;
+@testimonials-slider-height-mobile : 630px;
+
+.appTestimonials .value-slider{
+  height: @testimonials-slider-height;
+  text-align: center;
+  @media @mobile{
+    height: @testimonials-slider-height-mobile;
+  }
+}
+
+.appTestimonials .value-slider-indicators{
+  width : @testimonials-slider-width;
+  position: static;
+  margin: 30px auto 0 auto;
+  top: auto;
+  left: auto;
+}
+
+.appTestimonials .value-slider-indicator{
+  width: 10px;
+  height: 10px;
+  .border-radius(5px, 5px, 5px, 5px);
+  display: inline-block;
+  text-indent: -9999em;
+  margin: 0 5px;
+  background-color: @color-text-global-2;
+  border : none;
+}
+
+.appTestimonials .value-slider-indicator.selected{
+  border : none;
+  background-color: @color-highlight;
+}
+
+.appTestimonials .value-slider-container {
+  width: @testimonials-slider-width;
+  height: @testimonials-slider-height;
+  @media @mobile{
+    width: @testimonials-slider-width-mobile;
+    height: @testimonials-slider-height-mobile;
+  }
+}
+
+.appTestimonials .value-slider-item{
+  background-color: transparent;
+}
+
+
+
+/* APP PREVIEW ----------------------------------------------------------- */
+
+.appPreview{
+  max-width: @content-width;
+  margin: 100px auto 0 auto;
+  @media @mobile{
+  	margin: 45px auto 0 auto;
+  }
+}
+
+.appPreview-download{
+  margin: 104px 0 0 0;
+}
+
+.appPreview-logo{
+  position: relative;
+  width: auto;
+  height: 140px;
+  width: 100%;
+  text-indent: 160px;
+  line-height: 140px;
+  @media @mobile{
+  	width: 265px;
+  	margin: 0 auto;
+  }
+}
+
+.appPreview-logo:before{
+    content: "";
+    background-image: url("@{path-images}/value-logo.png");
+    background-size: 140px 140px;
+    background-position: center;
+    width: 140px;
+    height: 140px;
+    display: block;
+    position: absolute;
+}
+
+.appPreview-description{
+    font-size: 220%;
+    display: block;
+    margin: 100px 0 60px 0;
+    @media @mobile{
+    	text-align: center;
+    	margin: 50px auto;
+    	font-size: 160%;
+    	font-weight: 400;
+    }
+}
+
+.appPreview-buttons{
+  .clearfix();
+  margin: 0 0 4em 0;
+  @media @mobile{
+  	text-align: center;
+  	margin: 0 0 3em 0;
+  }
+
+  .appPreview-button-download{
+    .button-generic-typeA;
+    width: 48%;
+    float: left;
+  }
+
+  .appPreview-button-download:hover{
+    .button-generic-typeA-hover;
+  }
+
+  .appPreview-button-learnmore{
+    .button-generic-typeB;
+     width: 48%;
+    float: right;
+  }
+
+  .appPreview-button-learnmore:hover{
+    .button-generic-typeB-hover;
+  }
+}
+
+.appPreview-appStoreIcons{
+  background-image: url("@{path-images}/appstore-icons.png");
+  background-size: 178px 33px;
+  background-position: left top;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 33px;
+  text-indent: -9999em;
+  @media @mobile{
+  	background-position: center;
+  }
+}
+
+/* APP FEATURES -------------------------------------------------------------- */
+
+.appFeatures {
+  margin: 100px 0 0 0;
+  background-color: @color-highlight;
+  color: @color-text-banners;
+  text-align: center;
+  padding: 90px 0;
+  @media @mobile{
+  	padding : 30px 0 70px 0;
+  }
+}
+
+.appFeatures-container{
+  max-width: @content-width;
+  margin: 0 auto;
+}
+
+.appFeatures-header{
+  padding: 0 80px;
+  @media @mobile{
+  	padding: 0 20px;
+  	max-width: 450px;
+  	margin: 0 auto;
+  }
+}
+
+.appFeatures-title{
+  font-size: 240%;
+  font-weight: 400;
+}
+
+.appFeatures-description{
+  font-size: 150%;
+  font-weight: 200;
+  line-height: 1.2;
+}
+
+.appFeatures-items{
+  margin: 0;
+}
+
+.appFeatures-item{
+  margin: 95px 0 0 0;
+  padding: 0 50px;
+  @media @mobile{
+  	margin: 40px auto 0 auto;
+  	max-width: 450px;
+  }
+}
+
+.appFeatures-item:before{
+  content: "";
+  height: 110px;
+  width: 170px;
+  display: block;
+  margin: 0 auto;
+}
+
+.appFeatures-item:nth-child(1){
+  .background-image('@{path-images}/features-screen.png', 170px, 110px, top center);
+}
+
+.appFeatures-item:nth-child(2){
+  .background-image('@{path-images}/features-computer.png', 170px, 110px, top center);
+}
+
+.appFeatures-item:nth-child(3){
+  .background-image('@{path-images}/features-like.png', 170px, 110px, top center);
+}
+
+.appFeatures-item-title{
+  .appFeatures-title;
+  margin: 20px 0 30px 0;
+  @media @mobile{
+  	margin: 0 0 15px 0;
+  }
+}
+
+.appFeatures-item-description{
+  .appFeatures-description;
+}
+
+
+/* APP FEATURES PLUS ------------------------------------------------------------- */
+
+.appFeaturesPlus{
+  background-color: @color-bg-subscribe;
+  width: 100%;
+  margin: 0;
+}
+
+.appFeaturesPlus-container{
+  max-width: @content-width;
+  margin: 0 auto 0 auto;
+  @media @mobile{
+     padding: 0 0 50px 0;
+  }
+}
+
+.appFeaturesPlus-items{
+  margin: 142px 0 0 0;
+  padding: 0 0 0 75px;
+  @media @mobile{
+  	padding: 0 20px;
+  	max-width: 400px;
+  	margin: 100px auto 0 auto;
+  }
+}
+
+.appFeaturesPlus-item{
+  position: relative;
+}
+
+.appFeaturesPlus-item:before{
+  content: "";
+  width: 50px;
+  height: 50px;
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  .background-image('@{path-images}/app-features.png', 50px, 400px);
+}
+
+.appFeaturesPlus-item:nth-child(1):before{
+  background-position: 0 -15px;
+}
+
+.appFeaturesPlus-item:nth-child(2):before{
+  background-position: 0 -124px;
+}
+
+.appFeaturesPlus-item:nth-child(3):before{
+  background-position: 0 -226px;
+}
+
+.appFeaturesPlus-item:nth-child(4):before{
+  background-position: 0 -340px;
+}
+
+.appFeaturesPlus-title {
+  font-size: 150%;
+  font-weight: 400;
+  color: @color-highlight;
+  margin: 60px 0 5px 0;
+  padding: 0 0 0 70px;
+}
+
+.appFeaturesPlus-subtitle{
+  font-size: 140%;
+  font-weight: 400;
+  margin: 0;
+  padding: 0 0 0 70px;
+}
+
+.appFeaturesPlus-logo{
+  @media @mobile{
+    font-size: 200%;
+    text-align: center;
+  }
+}
+
+/* APP SUBSCRIBE  --------------------------------------------------------------- */
+
+.appSubscribe{
+  background-color: @color-bg-subscribe;
+  margin: 100px 0 0 0;
+  padding: 50px 0;
+  text-align: center;
+  color: @color-text-global-2;
+}
+
+.appSubscribe-container{
+  max-width: @content-width;
+  margin: 0 auto 0 auto;
+}
+
+.appSubscribe-container:before{
+  content: "";
+  width: 65px;
+  height: 45px;
+  .background-image('@{path-images}/app-subscribe.png', 65px, 45px);
+  display: block;
+  margin: 25px auto;
+}
+
+.appSubscribe-title{
+  font-size: 220%;
+  font-weight: 400;
+}
+
+.appSubscribe-description{
+  font-size: 160%;
+  font-weight: 400;
+  margin: 0;
+}
+
+.appSubscribe-form{
+  margin: 50px 0;
+}
+
+.appSubscribe-customInput{
+  margin: 0 auto;
+  width: 80%;
+  height: 57px;
+  .border-radius(30px,30px,30px,30px);
+  border : 1px solid #CDCDCD;
+  background-color: @color-bg-input;
+  position: relative;
+}
+
+.appSubscribe-input{
+  border: none;
+  display: block;
+  font-size: 140%;
+  margin: 13px 0 0 27px;
+  outline: none;
+  padding: 0;
+  width: 80%;
+}
+
+.appSubscribe-button{
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 0 2.5em;
+  height: 57px;
+  line-height: 57px;
+  color: @color-text-banners;
+  background-color: @color-highlight;
+  font-size: 150%;
+  font-weight: 700;
+  .border-radius(2em, 2em, 0, 0);
+
+  box-shadow: none;
+  border : none;
+  @media @mobile{
+    position: static;
+    margin: 40px auto;
+    .border-radius(2em, 2em, 2em, 2em);
+  }
+}
+
+/* APP TESTIMONIALS   ---------------------------------------------------------- */
+
+.appTestimonials{
+  max-width: @content-width;
+  margin: 0 auto;
+  color: @color-text-global-2;
+}
+
+blockquote{
+  border : none;
+}
+
+.appTestimonials-quote{
+  font-size: 120%;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.appTestimonials-quote:before{
+  content: "";
+  display: block;
+  width: 48px;
+  height: 45px;
+  margin: 40px auto;
+  .background-image('@{path-images}/testimonial-quote.png', 48px, 45px);
+}
+
+.appTestimonials-items{
+  margin: 92px 0 0 0;
+  display: inline-block;
+  width: auto;
+  @media @mobile{
+    margin: 10px 0 0 0;
+  }
+}
+
+.appTestimonials-item{
+  text-align: left;
+  position: relative;
+  height: 80px;
+  padding: 20px 0 0 0;
+  margin: 0 40px;
+  display: inline-block;
+  @media @mobile{
+    text-align: center;
+    margin: 20px;
+    padding: 0;
+  }
+}
+
+.appTestimonials-avatar{
+  width: 80px;
+  height: 80px;
+  .border-radius(40px, 40px, 40px, 40px);
+  box-shadow: 0px 0px 0px 1px @color-highlight;
+  border: 4px solid #fff;
+  position: absolute;
+  left: 0;
+  top: 0;
+  @media @mobile{
+    position: static;
+    margin: 0 auto;
+  }
+}
+
+.appTestimonials-author{
+  font-size: 120%;
+  font-weight: 400;
+  color: @color-highlight;
+  display: block;
+  margin: 0 0 0 100px;
+  @media @mobile{
+    margin: 0;
+  }
+}
+
+.appTestimonials-avatar.wells{
+  .background-image('@{path-images}/author-wells.jpg', 88px, 88px);
+}
+
+.appTestimonials-avatar.anthony{
+  .background-image('@{path-images}/author-anthony.jpg', 88px, 88px);
+}
+
+.appTestimonials-avatar.anna{
+  .background-image('@{path-images}/author-anna.jpg', 88px, 88px);
+}
+
+.appTestimonials-occupation{
+  margin: 0 0 0 100px;
+  @media @mobile{
+    margin: 0;
+  }
+}
+
+/* FOOTER   ------------------------------------------------------------------ */
+
+
+.mainFooter {
+  text-align: center;
+  max-width: @content-width;
+  margin: 0 auto 0 auto;
+  padding: 50px 0 80px 0;
+  font-size: 120%;
+  color: @color-text-global-2;
+}
+
+.mainFooter-social-container{
+  margin: 20px 0 50px 0;
+}
+
+.mainFooter-social{
+  width: 50px;
+  height: 60px;
+  text-indent: -9999em;
+  display: inline-block;
+  margin: 0 20px;
+  .background-image('@{path-images}/footer-social.png', 381px, 45px);
+  @media @mobile{
+    margin : 0 5px;
+  }
+}
+
+.mainFooter-social:nth-child(1){
+  background-position: 0 0;
+}
+
+.mainFooter-social:nth-child(2){
+  background-position: -106px 0;
+}
+
+.mainFooter-social:nth-child(3){
+  background-position: -216px 0;
+}
+
+.mainFooter-social:nth-child(4){
+  background-position: -325px 0;
+}
+
+.mainFooter a, .mainFooter a:link, .mainFooter a:visited{
+  color: @color-text-global-2;
+  font-weight: 400;
+}
+
+.mainFooter-copyright{
+  font-weight: 300;
+  padding-right: 20px;
+  @media @mobile{
+    padding-right: 0;
+    display: block;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
